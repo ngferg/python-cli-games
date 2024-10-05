@@ -70,7 +70,6 @@ def pressed6():
     if (state.game_mode): keep(6)
     elif (state.scoring_mode): state.set_score('sixes')
 def pressedc():
-    if (state.game_mode): state.dice = [6, 6, 6, 6, 6]
     if (state.scoring_mode): state.set_score('chance')
 def pressedt():
     if (state.scoring_mode): state.set_score('3 of a kind')
