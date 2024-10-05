@@ -129,6 +129,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+dice/yaht-cli/yahtcli-env/
 
 # Spyder project settings
 .spyderproject
