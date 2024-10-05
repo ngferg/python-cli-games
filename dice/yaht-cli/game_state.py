@@ -25,6 +25,9 @@ class state(object):
         self.categories['sixes'] = category('sixes', '(6)', players, self.score_sixes, True)
         self.categories['bonus'] = category('bonus', '', players, self.score_bonus)
         self.categories['top total'] = category('top total', '', players, self.score_top_total, True)
+        self.categories['chance'] = category('chance', '(c)', players, self.score_all_dice, True)
+        self.categories['bottom total'] = category('bottom total', '', players, self.score_bottom_total)
+        self.categories['total'] = category('total', '', players, self.score_total)
 
         self.roll_num=0
         self.dice = [0] * 5
@@ -61,10 +64,16 @@ class state(object):
     def set_score(self, category: str):
         if (self.category_not_scored(category)):
             self.categories[category].scores[self.current_player-1] = self.categories[category].score_method()
-            self.score_top_total()
+            self.score_total()
             menus.print_score_card(self, False)
             self.next_turn()
     
+    def score_all_dice(self) -> int:
+        score = 0
+        for die in self.dice:
+            score += die
+        return score
+
     def score_top_numbers(self, num: int) -> int:
         score = 0
         for die in self.dice:
@@ -98,6 +107,17 @@ class state(object):
         self.categories['top total'].scores[self.current_player-1] = total
         return total
     
+    def score_bottom_total(self) -> int:
+        total = self.sum_bottom()
+        self.categories['bottom total'].scores[self.current_player-1] = total
+        return total
+    
+    def score_total(self) -> int:
+        total = self.score_top_total() + self.score_bottom_total()
+        self.categories['total'].scores[self.current_player-1] = total
+        return total
+
+    
     def sum_top(self) -> int:
         sum = self.get_int_score_from('ones')
         sum += self.get_int_score_from('twos')
@@ -105,6 +125,10 @@ class state(object):
         sum += self.get_int_score_from('fours')
         sum += self.get_int_score_from('fives')
         sum += self.get_int_score_from('sixes')
+        return sum
+    
+    def sum_bottom(self) -> int:
+        sum = self.get_int_score_from('chance')
         return sum
     
     def get_int_score_from(self, category: str) -> int:

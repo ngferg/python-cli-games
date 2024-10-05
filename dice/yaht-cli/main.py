@@ -47,11 +47,10 @@ def keep(die: int):
         ascii.print_dice(state.dice, state.keeps)
         menus.print_main_menu()
 
-
-def pressed(num: int, category: str):
-    if (state.game_mode): keep(num)
-    elif (state.scoring_mode): state.set_score(category)
-
+def pressedr():
+    if (state.game_mode): roll()
+def pressede():
+    if (state.game_mode): end_turn()
 def pressed1():
     if (state.game_mode): keep(1)
     elif (state.scoring_mode): state.set_score('ones')
@@ -70,18 +69,22 @@ def pressed5():
 def pressed6():
     if (state.game_mode): keep(6)
     elif (state.scoring_mode): state.set_score('sixes')
+def pressedc():
+    if (state.scoring_mode): state.set_score('chance')
+
 
 menus.print_start_turn(state)
 menus.print_main_menu(False)
 
-keyboard.add_hotkey('r', roll)
-keyboard.add_hotkey('e', end_turn)
+keyboard.add_hotkey('r', pressedr)
+keyboard.add_hotkey('e', pressede)
 keyboard.add_hotkey('1', pressed1)
 keyboard.add_hotkey('2', pressed2)
 keyboard.add_hotkey('3', pressed3)
 keyboard.add_hotkey('4', pressed4)
 keyboard.add_hotkey('5', pressed5)
 keyboard.add_hotkey('6', pressed6)
+keyboard.add_hotkey('c', pressedc)
 
 
 keyboard.wait('q')
