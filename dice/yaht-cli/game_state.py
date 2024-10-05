@@ -25,6 +25,9 @@ class state(object):
         self.categories['sixes'] = category('sixes', '(6)', players, self.score_sixes, True)
         self.categories['bonus'] = category('bonus', '', players, self.score_bonus)
         self.categories['top total'] = category('top total', '', players, self.score_top_total, True)
+        self.categories['3 of a kind'] = category('3 of a kind', '(t)', players, self.score_3_of_a_kind)
+        self.categories['4 of a kind'] = category('4 of a kind', '(f)', players, self.score_4_of_a_kind)
+        self.categories['yahtzee'] = category('yahtzee', '(y)', players, self.score_yahtzee)
         self.categories['chance'] = category('chance', '(c)', players, self.score_all_dice, True)
         self.categories['bottom total'] = category('bottom total', '', players, self.score_bottom_total)
         self.categories['total'] = category('total', '', players, self.score_total)
@@ -73,6 +76,26 @@ class state(object):
         for die in self.dice:
             score += die
         return score
+
+    def score_3_of_a_kind(self) -> int:
+        if (self.has_count_of(3)): return self.score_all_dice()
+        else: return 0
+
+    def score_4_of_a_kind(self) -> int:
+        if (self.has_count_of(4)): return self.score_all_dice()
+        else: return 0
+    
+    def score_yahtzee(self) -> int:
+        if (self.has_count_of(5)): return 50
+        else: return 0
+
+    def has_count_of(self, count: int) -> bool:
+        sums = [0] * 6
+        for die in self.dice:
+            sums[die-1] += 1
+            if (sums[die-1] >= count): return True
+        return False
+
 
     def score_top_numbers(self, num: int) -> int:
         score = 0
@@ -128,7 +151,10 @@ class state(object):
         return sum
     
     def sum_bottom(self) -> int:
-        sum = self.get_int_score_from('chance')
+        sum = self.get_int_score_from('3 of a kind')
+        sum += self.get_int_score_from('4 of a kind')
+        sum += self.get_int_score_from('yahtzee')
+        sum += self.get_int_score_from('chance')
         return sum
     
     def get_int_score_from(self, category: str) -> int:

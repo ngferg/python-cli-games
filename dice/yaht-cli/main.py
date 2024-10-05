@@ -70,8 +70,14 @@ def pressed6():
     if (state.game_mode): keep(6)
     elif (state.scoring_mode): state.set_score('sixes')
 def pressedc():
+    if (state.game_mode): state.dice = [6, 6, 6, 6, 6]
     if (state.scoring_mode): state.set_score('chance')
-
+def pressedt():
+    if (state.scoring_mode): state.set_score('3 of a kind')
+def pressedf():
+    if (state.scoring_mode): state.set_score('4 of a kind')
+def pressedy():
+    if (state.scoring_mode): state.set_score('yahtzee')
 
 menus.print_start_turn(state)
 menus.print_main_menu(False)
@@ -85,7 +91,9 @@ keyboard.add_hotkey('4', pressed4)
 keyboard.add_hotkey('5', pressed5)
 keyboard.add_hotkey('6', pressed6)
 keyboard.add_hotkey('c', pressedc)
-
+keyboard.add_hotkey('t', pressedt)
+keyboard.add_hotkey('f', pressedf)
+keyboard.add_hotkey('y', pressedy)
 
 keyboard.wait('q')
 
