@@ -17,11 +17,6 @@ except:
 state = game_state.state(players)
 print(f'Starting a {state.max_players} game')
 
-def set_score_mode():
-    state.print_score_card(state.current_player, True)
-    state.scoring_mode=True
-    state.game_mode=False
-
 def roll():
     if (state.game_mode):
         state.roll_num += 1
@@ -34,13 +29,13 @@ def roll():
         ascii.print_dice(state.dice, state.keeps)
 
         if (state.roll_num >= 3):
-            set_score_mode()
+            end_turn()
         else:
             menus.print_main_menu()
 
 def end_turn():
     if (state.game_mode):
-        set_score_mode()
+        state.set_score_mode()
 
 def keep(die: int):
     if (state.game_mode and state.roll_num > 0):
@@ -52,42 +47,42 @@ def keep(die: int):
         ascii.print_dice(state.dice, state.keeps)
         menus.print_main_menu()
 
-def keep1(): keep(1)
-def keep2(): keep(2)
-def keep3(): keep(3)
-def keep4(): keep(4)
-def keep5(): keep(5)
-def keep6(): keep(6)
 
-def score1(): 
-    if (state.scoring_mode): state.set_score('ones')
-def score2(): 
-    if (state.scoring_mode): state.set_score('twos')
-def score3(): 
-    if (state.scoring_mode): state.set_score('threes')
-def score4(): 
-    if (state.scoring_mode): state.set_score('fours')
-def score5(): 
-    if (state.scoring_mode): state.set_score('fives')
-def score6(): 
-    if (state.scoring_mode): state.set_score('sixes')
+def pressed(num: int, category: str):
+    if (state.game_mode): keep(num)
+    elif (state.scoring_mode): state.set_score(category)
+
+def pressed1():
+    if (state.game_mode): keep(1)
+    elif (state.scoring_mode): state.set_score('ones')
+def pressed2():
+    if (state.game_mode): keep(2)
+    elif (state.scoring_mode): state.set_score('twos')
+def pressed3():
+    if (state.game_mode): keep(3)
+    elif (state.scoring_mode): state.set_score('threes')
+def pressed4():
+    if (state.game_mode): keep(4)
+    elif (state.scoring_mode): state.set_score('fours')
+def pressed5():
+    if (state.game_mode): keep(5)
+    elif (state.scoring_mode): state.set_score('fives')
+def pressed6():
+    if (state.game_mode): keep(6)
+    elif (state.scoring_mode): state.set_score('sixes')
 
 menus.print_start_turn(state)
 menus.print_main_menu(False)
 
 keyboard.add_hotkey('r', roll)
-keyboard.add_hotkey('k+1', keep1)
-keyboard.add_hotkey('k+2', keep2)
-keyboard.add_hotkey('k+3', keep3)
-keyboard.add_hotkey('k+4', keep4)
-keyboard.add_hotkey('k+5', keep5)
-keyboard.add_hotkey('k+6', keep6)
-keyboard.add_hotkey('1', score1)
-keyboard.add_hotkey('2', score2)
-keyboard.add_hotkey('3', score3)
-keyboard.add_hotkey('4', score4)
-keyboard.add_hotkey('5', score5)
-keyboard.add_hotkey('6', score6)
+keyboard.add_hotkey('e', end_turn)
+keyboard.add_hotkey('1', pressed1)
+keyboard.add_hotkey('2', pressed2)
+keyboard.add_hotkey('3', pressed3)
+keyboard.add_hotkey('4', pressed4)
+keyboard.add_hotkey('5', pressed5)
+keyboard.add_hotkey('6', pressed6)
+
 
 keyboard.wait('q')
 

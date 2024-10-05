@@ -1,5 +1,14 @@
 import menus
 
+class category(object):
+    def __init__(self, name: str, hotkey: str, max_players: int, score_method, print_line_after=False):
+        self.name = name
+        self.hotkey = hotkey
+        self.max_players = max_players
+        self.scores = ['_'] * self.max_players
+        self.print_line_after = print_line_after
+        self.score_method = score_method
+
 class state(object):
     def __init__(self, players: int):
         if (players < 1):
@@ -7,29 +16,15 @@ class state(object):
             exit(1)
         self.max_players = players
         self.current_player = 1
-        self.score_sheet = dict()
-        self.score_sheet['ones'] = ['_'] * self.max_players
-        self.score_sheet['twos'] = ['_'] * self.max_players
-        self.score_sheet['threes'] = ['_'] * self.max_players
-        self.score_sheet['fours'] = ['_'] * self.max_players
-        self.score_sheet['fives'] = ['_'] * self.max_players
-        self.score_sheet['sixes'] = ['_'] * self.max_players
-        self.category_hot_keys = {
-            'ones': '(1)',
-            'twos': '(2)',
-            'threes': '(3)',
-            'fours': '(4)',
-            'fives': '(5)',
-            'sixes': '(6)'
-        }
-        self.category_score_methods = {
-            'ones': self.score_ones,
-            'twos': self.score_twos,
-            'threes': self.score_threes,
-            'fours': self.score_fours,
-            'fives': self.score_fives,
-            'sixes': self.score_sixes
-        }
+        self.categories = dict[str, category]()
+        self.categories['ones'] = category('ones', '(1)', players, self.score_ones)
+        self.categories['twos'] = category('twos', '(2)', players, self.score_twos)
+        self.categories['threes'] = category('threes', '(3)', players, self.score_threes)
+        self.categories['fours'] = category('fours', '(4)', players, self.score_fours)
+        self.categories['fives'] = category('fives', '(5)', players, self.score_fives)
+        self.categories['sixes'] = category('sixes', '(6)', players, self.score_sixes, True)
+        self.categories['bonus'] = category('bonus', '', players, self.score_bonus)
+        self.categories['top total'] = category('top total', '', players, self.score_top_total, True)
 
         self.roll_num=0
         self.dice = [0] * 5
@@ -38,19 +33,7 @@ class state(object):
         self.game_mode = True
 
     def category_not_scored(self, category: str) -> bool:
-        return self.score_sheet[category][self.current_player-1] == '_'
-
-    def print_score_card(self, player: int, with_available_scores: bool):
-        print(f'Player {player} score card:')
-        print(f'+--------------------+')
-        for category, scores in self.score_sheet.items():
-            print(f'| {category}: {scores[player-1]}{' '*(16 - str(category).__len__())}| ', end='')
-            if (with_available_scores and self.category_not_scored(category)):
-                print(f'{self.category_hot_keys[category]} {self.category_score_methods[category]()}', end='')
-            print()
-        print(f'+--------------------+')
-        if (with_available_scores):
-            print('Press the button for the score you want to keep')
+        return self.categories[category].scores[self.current_player-1] == '_'
     
     def reset_dice_state(self):
         self.roll_num=0
@@ -58,20 +41,29 @@ class state(object):
         self.keeps = ['n'] * 5
 
     def next_turn(self):
+        self.scoring_mode=False
+        self.game_mode=True
         self.reset_dice_state()
         self.current_player += 1
         if (self.current_player > self.max_players):
             self.current_player = 1
-        self.scoring_mode=False
-        self.game_mode=True
+
+        if (self.max_players > 1):
+            menus.print_start_turn(self)
+
         menus.print_main_menu(False)
+
+    def set_score_mode(self):
+        self.scoring_mode=True
+        self.game_mode=False
+        menus.print_score_card(self, True)
 
     def set_score(self, category: str):
         if (self.category_not_scored(category)):
-            self.score_sheet[category][self.current_player-1] = self.category_score_methods[category]()
-            self.print_score_card(self.current_player, False)
+            self.categories[category].scores[self.current_player-1] = self.categories[category].score_method()
+            self.score_top_total()
+            menus.print_score_card(self, False)
             self.next_turn()
-    
     
     def score_top_numbers(self, num: int) -> int:
         score = 0
@@ -93,3 +85,28 @@ class state(object):
     def score_sixes(self) -> int:
         return self.score_top_numbers(6)
         
+    def score_bonus(self) -> int:
+        if (self.sum_top() >= 63): 
+            self.categories['bonus'].scores[self.current_player-1] = 35
+            return 35
+        else: 
+            self.categories['bonus'].scores[self.current_player-1] = 0
+            return 0
+    
+    def score_top_total(self) -> int:
+        total = self.sum_top() + self.score_bonus()
+        self.categories['top total'].scores[self.current_player-1] = total
+        return total
+    
+    def sum_top(self) -> int:
+        sum = self.get_int_score_from('ones')
+        sum += self.get_int_score_from('twos')
+        sum += self.get_int_score_from('threes')
+        sum += self.get_int_score_from('fours')
+        sum += self.get_int_score_from('fives')
+        sum += self.get_int_score_from('sixes')
+        return sum
+    
+    def get_int_score_from(self, category: str) -> int:
+        if (self.categories[category].scores[self.current_player-1] == '_'): return 0
+        return int(self.categories[category].scores[self.current_player-1])
