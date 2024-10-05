@@ -25,4 +25,4 @@ jobs:
         python-version: "3.10"
     - name: Print Dice
       run: |
-        python $GITHUB_WORKSPACE/dice/gha.yml
+        python $GITHUB_WORKSPACE/dice/gha.py
