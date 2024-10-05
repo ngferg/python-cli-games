@@ -18,7 +18,7 @@ def print_dice(dice: list, keeps: list):
         for die in dice:
             print(f' {ascii_dice[int(die)-1][i]} ', end='')
         print('')
-    print('keep: ', end='')
+    print('keep:    ', end='')
     for i in range(0, 5):
-        print(f'{i+1} = {keeps[i]}      ', end='')
+        print(f'{keeps[i]}          ', end='')
     print('')
