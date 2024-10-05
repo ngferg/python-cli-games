@@ -78,6 +78,12 @@ def pressedf():
     if (state.scoring_mode): state.set_score('4 of a kind')
 def pressedy():
     if (state.scoring_mode): state.set_score('yahtzee')
+def pressedh():
+    if (state.scoring_mode): state.set_score('full house')
+def presseds():
+    if (state.scoring_mode): state.set_score('small straight')
+def pressedl():
+    if (state.scoring_mode): state.set_score('large straight')
 
 menus.print_start_turn(state)
 menus.print_main_menu(False)
@@ -94,6 +100,9 @@ keyboard.add_hotkey('c', pressedc)
 keyboard.add_hotkey('t', pressedt)
 keyboard.add_hotkey('f', pressedf)
 keyboard.add_hotkey('y', pressedy)
+keyboard.add_hotkey('h', pressedh)
+keyboard.add_hotkey('s', presseds)
+keyboard.add_hotkey('l', pressedl)
 
 keyboard.wait('q')
 

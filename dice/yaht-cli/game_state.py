@@ -27,6 +27,9 @@ class state(object):
         self.categories['top total'] = category('top total', '', players, self.score_top_total, True)
         self.categories['3 of a kind'] = category('3 of a kind', '(t)', players, self.score_3_of_a_kind)
         self.categories['4 of a kind'] = category('4 of a kind', '(f)', players, self.score_4_of_a_kind)
+        self.categories['full house'] = category('full house', '(h)', players, self.score_full_house)
+        self.categories['small straight'] = category('small straight', '(s)', players, self.score_small_straight)
+        self.categories['large straight'] = category('large straight', '(l)', players, self.score_large_straight)
         self.categories['yahtzee'] = category('yahtzee', '(y)', players, self.score_yahtzee)
         self.categories['chance'] = category('chance', '(c)', players, self.score_all_dice, True)
         self.categories['bottom total'] = category('bottom total', '', players, self.score_bottom_total)
@@ -88,13 +91,44 @@ class state(object):
     def score_yahtzee(self) -> int:
         if (self.has_count_of(5)): return 50
         else: return 0
+    
+    def score_full_house(self) -> int:
+        if (self.has_count_of(3, True)): return 25
+        else: return 0
 
-    def has_count_of(self, count: int) -> bool:
+    def has_count_of(self, count: int, house=False) -> bool:
         sums = [0] * 6
         for die in self.dice:
             sums[die-1] += 1
-            if (sums[die-1] >= count): return True
-        return False
+            if (sums[die-1] >= count and not house): return True
+        if not house: return False
+        has_count = False
+        has_second = False
+        for sum_count in sums:
+            if (sum_count == count): has_count = True
+            if (sum_count == 2): has_second = True
+        return has_count and has_second
+    
+    def score_large_straight(self) -> int:
+        sorted_dice = self.dice.copy()
+        sorted_dice.sort()
+        if (self.is_straight(sorted_dice)): return 40
+        else: return 0
+
+    def score_small_straight(self) -> int:
+        sorted_dice = self.dice.copy()
+        sorted_dice.sort()
+
+        if (self.is_straight(sorted_dice[:4]) or self.is_straight(sorted_dice[1:])): return 30
+        else: return 0
+    
+    def is_straight(self, sorted_dice: list[int]) -> bool:
+        is_straight = True
+        last_die = -1
+        for die in sorted_dice:
+            if not (last_die == -1 or last_die + 1 == die): is_straight = False
+            last_die = die
+        return is_straight
 
 
     def score_top_numbers(self, num: int) -> int:
@@ -154,6 +188,9 @@ class state(object):
         sum = self.get_int_score_from('3 of a kind')
         sum += self.get_int_score_from('4 of a kind')
         sum += self.get_int_score_from('yahtzee')
+        sum += self.get_int_score_from('full house')
+        sum += self.get_int_score_from('small straight')
+        sum += self.get_int_score_from('large straight')
         sum += self.get_int_score_from('chance')
         return sum
     
