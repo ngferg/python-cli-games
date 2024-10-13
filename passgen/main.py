@@ -23,23 +23,19 @@ symbols_count = int_input('symbols')
 numbers_count = int_input('numbers')
 
 total_length = letters_count + symbols_count + numbers_count
-password = ''
+password_list = []
 
-for c in range(0, total_length):
-    c_type = random.randint(0,2)
-    
-    if c_type == 2 and symbols_count > 0:
-        symbols_count -= 1
-        password += random.choice(symbols)
-    else: c -= 1
-    if c_type == 1 and numbers_count > 0:
-        numbers_count -= 1
-        password += random.choice(numbers)
-    else: c -= 1
-    if c_type == 0 and letters_count > 0:
-        letters_count -= 1
-        password += random.choice(letters)
-    else: c -= 1
+for c in range(0, letters_count):
+    password_list.append(random.choice(letters))
 
+for c in range(0, symbols_count):
+    password_list.append(random.choice(symbols))
+
+for c in range(0, numbers_count):
+    password_list.append(random.choice(numbers))
+
+random.shuffle(password_list)
+
+password = ''.join(password_list)
 
 print(f'Your password is {password}')
