@@ -30,15 +30,15 @@ for c in range(0, total_length):
     
     if c_type == 2 and symbols_count > 0:
         symbols_count -= 1
-        password += symbols[random.randint(0, symbols.__len__())]
+        password += random.choice(symbols)
     else: c -= 1
     if c_type == 1 and numbers_count > 0:
         numbers_count -= 1
-        password += numbers[random.randint(0, numbers.__len__())]
+        password += random.choice(numbers)
     else: c -= 1
     if c_type == 0 and letters_count > 0:
         letters_count -= 1
-        password += letters[random.randint(0, letters.__len__())]
+        password += random.choice(letters)
     else: c -= 1
 
 
