@@ -5,7 +5,7 @@ def get_cypher() -> int:
     if field.isnumeric() and float(field).is_integer():
         return int(field)
     else:
-        print('Not a positive whole number')
+        print('Not a whole number')
         exit(1)
 
 def encrypt(msg: str, cypher: int) -> str:
