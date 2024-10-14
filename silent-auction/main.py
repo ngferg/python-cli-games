@@ -10,7 +10,7 @@ print('Time for a silent auctions')
 
 while running:
     name = input('Please enter your name: ')
-    bid = input('Please enter your bid: ')
+    bid = input('Please enter your bid: $')
     auctions[name] = float(bid)
     more = input('Is there another bidder? (y/n): ').lower()[0]
     
