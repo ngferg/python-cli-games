@@ -2,7 +2,12 @@ import random
 from typing import List
 import ascii
 
-words = ['mouse', 'cat', 'aardvark']
+words = []
+with open('resources/words_alpha.txt', 'r') as file:
+    lines = file.readlines()
+    for line in lines:
+        words.append(line.strip())
+
 found_letters = []
 chosen_word = random.choice(words)
 state = 0
@@ -46,3 +51,4 @@ while state < 7:
 print(ascii.hangmans[state])
 process_game_logic(chosen_word, found_letters)
 print('You lose! Good day sir!')
+print(f'Answer was: {chosen_word}')
