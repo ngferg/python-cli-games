@@ -35,11 +35,11 @@ while running:
     if action == 'e':
         msg = input('Type the message to encrypt: ')
         cypher = get_cypher()
-        print(f'You\'r encyrpted message is: {encrypt(msg, cypher)}')
+        print(f'Your encyrpted message is: {encrypt(msg, cypher)}')
         running = go_again()
 
     elif action == 'd':
         msg = input('Type the message to decrypt: ')
         cypher = get_cypher() * -1
-        print(f'You\'r decyrpted message is: {encrypt(msg, cypher)}')
+        print(f'Your decyrpted message is: {encrypt(msg, cypher)}')
         running = go_again()
