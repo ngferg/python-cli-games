@@ -1,19 +1,19 @@
 
-class drink(object):
+class Drink(object):
     def __init__(self):
         self.water = 0
         self.milk = 0
         self.coffee = 0
         self.name='generic drink'
     
-class espresso(drink):
+class Espresso(Drink):
     def __init__(self):
         super().__init__()
         self.water = 50
         self.coffee = 100
         self.name = 'espresso'
 
-class latte(drink):
+class Latte(Drink):
     def __init__(self):
         super().__init__()
         self.water = 100
@@ -21,13 +21,19 @@ class latte(drink):
         self.milk = 50
         self.name = 'latte'
 
-class machine(object):
+class HotWater(Drink):
     def __init__(self):
-        self.water=500
+        super().__init__()
+        self.water = 200
+        self.name = 'hot water'
+
+class Machine(object):
+    def __init__(self):
+        self.water=1000
         self.milk=100
         self.coffee=200
     
-    def make_drink(self, drink: drink):
+    def make_drink(self, drink: Drink):
         if self.water < drink.water:
             print('Not enough water')
         elif self.milk < drink.milk:

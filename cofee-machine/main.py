@@ -1,15 +1,17 @@
-import machine
+import coffee
 
-coffee_machine = machine.machine()
+coffee_machine = coffee.Machine()
 action = ''
 
 
 while action != 'q':
     print('Coffee machine menu: ')
-    action = input('What drink do you want? (l)atte, (e)sspresso: ').lower()[0]
+    action = input('What drink do you want? (l)atte, (e)sspresso, (h)ot water: ').lower()[0]
     if (action == 'l'):
-        coffee_machine.make_drink(machine.latte())
+        coffee_machine.make_drink(coffee.Latte())
     elif (action == 'e'):
-        coffee_machine.make_drink(machine.espresso())
+        coffee_machine.make_drink(coffee.Espresso())
+    elif (action == 'h'):
+        coffee_machine.make_drink(coffee.HotWater())
     elif (action == 'r'):
         coffee_machine.report()
