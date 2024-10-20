@@ -1,14 +1,7 @@
 import random
 
-# randomly set a number between 1 and 10
-answer = random.randint(1, 10)
-prompt = 'Guess a number between 1 and 10: '
-guesses = 0
-guess = -1
-user_guessed_correctly = False
-
-while not user_guessed_correctly:
-    user_input = input(prompt)
+def check_guess(user_input: str):
+    global user_guessed_correctly, guesses
     if (user_input.isnumeric()): 
         guess = int(user_input)
         guesses += 1
@@ -21,6 +14,18 @@ while not user_guessed_correctly:
             user_guessed_correctly = True
     else:
         print('That wasn\'t a number!  Try again!')
+
+
+# randomly set a number between 1 and 10
+answer = random.randint(1, 10)
+prompt = 'Guess a number between 1 and 10: '
+guesses = 0
+guess = -1
+user_guessed_correctly = False
+
+while not user_guessed_correctly:
+    user_input = input(prompt)
+    check_guess(user_input)
 
 
 
