@@ -1,31 +1,23 @@
 
 class Drink(object):
-    def __init__(self):
-        self.water = 0
-        self.milk = 0
-        self.coffee = 0
-        self.name='generic drink'
+    def __init__(self, water: int, name: str, milk=0, coffee=0):
+        self.water = water
+        self.milk = milk
+        self.coffee = coffee
+        self.name=name
     
 class Espresso(Drink):
     def __init__(self):
-        super().__init__()
-        self.water = 50
-        self.coffee = 100
-        self.name = 'espresso'
+        super().__init__(water=50, coffee=100, name='espresso')
+
 
 class Latte(Drink):
     def __init__(self):
-        super().__init__()
-        self.water = 100
-        self.coffee = 50
-        self.milk = 50
-        self.name = 'latte'
+        super().__init__(water=100, coffee=50, milk=50, name='latte')
 
 class HotWater(Drink):
     def __init__(self):
-        super().__init__()
-        self.water = 200
-        self.name = 'hot water'
+        super().__init__(water=200, name='hot water')
 
 class Machine(object):
     def __init__(self):
