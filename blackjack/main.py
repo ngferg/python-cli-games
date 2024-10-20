@@ -2,6 +2,8 @@ import random
 
 def shuffle_deck() -> list:
     deck = list('22223333444455556666777788889999JJJJQQQQKKKKAAAA')
+    for _ in range(0,4): 
+        deck.append('10')
     random.shuffle(deck)
     return deck
 
